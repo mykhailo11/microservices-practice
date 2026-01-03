@@ -1,0 +1,9 @@
+# doesn't work with IntelliJ's gRPC client
+
+GRPC localhost:9090/BillingService/CreateBillingAccount
+
+{
+  "patientId": "123456",
+  "name": "Sara Dering",
+  "email": "sara.dering@mail.com"
+}

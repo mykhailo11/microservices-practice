@@ -3,6 +3,7 @@ package com.pm.patientservice.controller;
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.dto.validation.CreatePatientValidationGroup;
+import com.pm.patientservice.service.api.BillingService;
 import com.pm.patientservice.service.api.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,9 +21,11 @@ import java.util.UUID;
 public class PatientController {
 
     private final PatientService patientService;
+    private final BillingService billingService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, BillingService billingService) {
         this.patientService = patientService;
+        this.billingService = billingService;
     }
 
     @GetMapping
@@ -53,6 +56,13 @@ public class PatientController {
     @Operation(summary = "Delete a new patient")
     public ResponseEntity<Void> deletePatient(@PathVariable UUID id) {
         patientService.deletePatient(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/billing-account")
+    @Operation(summary = "Create a billing account")
+    public ResponseEntity<Void> createBillingAccount() {
+        billingService.createBillingAccount();
         return ResponseEntity.noContent().build();
     }
 

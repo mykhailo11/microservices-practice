@@ -59,11 +59,4 @@ public class PatientController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/billing-account")
-    @Operation(summary = "Create a billing account")
-    public ResponseEntity<Void> createBillingAccount() {
-        billingService.createBillingAccount();
-        return ResponseEntity.noContent().build();
-    }
-
 }

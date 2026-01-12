@@ -7,7 +7,10 @@ import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.mapper.api.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repository.api.PatientRepository;
+import com.pm.patientservice.service.api.BillingService;
+import com.pm.patientservice.service.api.PatientProducer;
 import com.pm.patientservice.service.api.PatientService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,10 +22,19 @@ public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
+    private final BillingService billingService;
+    private final PatientProducer patientProducer;
 
-    public PatientServiceImpl(PatientRepository patientRepository, PatientMapper patientMapper) {
+    public PatientServiceImpl(
+            PatientRepository patientRepository,
+            PatientMapper patientMapper,
+            BillingService billingService,
+            PatientProducer patientProducer
+    ) {
         this.patientRepository = patientRepository;
         this.patientMapper = patientMapper;
+        this.billingService = billingService;
+        this.patientProducer = patientProducer;
     }
 
     @Override
@@ -32,6 +44,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Transactional
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) throws Exception {
 
         // an email must be unique
@@ -43,6 +56,10 @@ public class PatientServiceImpl implements PatientService {
         }
 
         Patient patient = patientRepository.save(patientMapper.toPatient(patientRequestDTO));
+        billingService.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+        // produce patient created event
+        patientProducer.sendPatientCreatedEvent(patient);
+
         return patientMapper.toPatientResponseDTO(patient);
     }
 

@@ -5,8 +5,8 @@ i decided to put this configuration in separate module, compile it here and use 
 
 syntax = "proto3";
 
+package com.pm.contract.billing;
 option java_multiple_files = true;
-option java_package = "com.pm.contract.billing";
 
 service BillingService {
   rpc CreateBillingAccount (BillingRequest) returns (BillingResponse);

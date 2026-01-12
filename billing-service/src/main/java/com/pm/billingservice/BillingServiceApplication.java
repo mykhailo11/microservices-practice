@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class BillingServiceApplication {
 
-    @Value("${grpc.port:9090}")
+    @Value("${billing-service.port:9090}")
     private int grpcPort;
 
     @Bean(initMethod = "start", destroyMethod = "shutdown")
@@ -26,7 +26,7 @@ public class BillingServiceApplication {
     }
 
     public static void main(String[] args) {
-        // REST is still enabled and application listens to requests
+        // REST is still enabled and application listens to requests withing the internal framework (inside docker context)
         SpringApplication.run(BillingServiceApplication.class, args);
     }
 

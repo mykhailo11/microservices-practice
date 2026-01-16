@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "Sam Smith",
-  "email": "sam.smith2@mail.com",
+  "email": "kafka@mail.com",
   "address": "321 Cherry St, Shelbyville",
   "dateOfBirth": "1995-09-09"
 }

@@ -9,6 +9,7 @@
         <module>contract</module>
         <module>patient-service</module>
         <module>billing-service</module>
+        <module>analytics-service</module>
     </modules>
 
     <properties>

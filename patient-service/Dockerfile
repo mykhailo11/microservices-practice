@@ -1,14 +1,9 @@
 FROM maven:3.9.12-eclipse-temurin-21 as builder
 WORKDIR /app
-COPY pom.xml .
-COPY ./billing-service/pom.xml ./billing-service/pom.xml
-COPY ./patient-service/pom.xml ./patient-service/pom.xml
-COPY ./contract/pom.xml ./contract/pom.xml
+COPY . .
 
-RUN mvn -pl contract, patient-service verify --fail-never
-COPY ./contract/src ./contract/src
-COPY ./patient-service/src ./patient-service/src
-RUN mvn -pl patient-service -am package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn -B dependency:go-offline
+RUN --mount=type=cache,target=/root/.m2 mvn -pl patient-service -am package -DskipTests
 
 FROM eclipse-temurin:21-jre-alpine-3.23 as runner
 WORKDIR /app

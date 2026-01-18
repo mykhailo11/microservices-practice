@@ -1,5 +1,5 @@
 server:
-  port: 4004
+  port: 8080
 
 spring:
   cloud:
@@ -7,7 +7,18 @@ spring:
       server:
         webflux:
           routes:
-            ## REST CLIENT -> http://localhost:4004/api/patients
+            ## REST CLIENT -> http://localhost:8080/auth/login
+            ## API GATEWAY -> http://auth-service:8080/login
+            ## AUTH SERVICE (SPRING BOOT APP) -> /login -> Token
+
+            - id: auth-service-route
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/auth/**
+              filters:
+                - StripPrefix=1
+
+            ## REST CLIENT -> http://localhost:8080/api/patients
             ## API GATEWAY -> http://patient-service:8080/patients
             ## PATIENT SERVICE (SPRING BOOT APP) -> /patients -> Patients Array
             - id: patient-service-route
@@ -16,7 +27,9 @@ spring:
                 - Path=/api/patients/**
               filters:
                 - StripPrefix=1
-            ## REST CLIENT -> http://localhost:4004/api-docs/patients
+                - TokenValidation
+
+            ## REST CLIENT -> http://localhost:8080/api-docs/patients
             ## API GATEWAY -> http://patient-service:8080/v3/api-docs
             - id: api-docs-patient-route
               uri: http://patient-service:8080
@@ -24,3 +37,11 @@ spring:
                 - Path=/api-docs/patients
               filters:
                 - RewritePath=/api-docs/patients,/v3/api-docs
+                - TokenValidation
+            - id: api-docs-auth-route
+
+              uri: http://auth-service:8080
+              predicates:
+                - Path=/api-docs/auth
+              filters:
+                - RewritePath=/api-docs/auth,/v3/api-docs

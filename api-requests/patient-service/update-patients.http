@@ -1,5 +1,5 @@
 ### PUT request to update a patient
-PUT http://localhost:4000/patients/9613687a-f102-4a48-9f94-858148446d1d
+PUT http://localhost:8080/api/patients/9613687a-f102-4a48-9f94-858148446d1d
 Content-Type: application/json
 
 {

@@ -1,3 +1,3 @@
 # gRPC test request
 
-POST http://localhost:8080/patients/billing-account
+POST http://localhost:8080/api/patients/billing-account

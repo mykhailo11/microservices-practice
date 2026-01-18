@@ -1,4 +1,4 @@
-ARG PROJECT_NAME=api-gateway
+ARG PROJECT_NAME=auth-service
 
 FROM maven:3.9.12-eclipse-temurin-21 as builder
 ARG PROJECT_NAME
